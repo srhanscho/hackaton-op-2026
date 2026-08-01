@@ -8,6 +8,12 @@ build/
 # Variables de entorno
 .env
 .env.*
+!.env.example
+
+# LLAVES PRIVADAS DE OPEN PAYMENTS — nunca commitear
+*.key
+*.pem
+private*.key
 
 # Logs
 *.log
