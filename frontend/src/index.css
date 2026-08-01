@@ -4,12 +4,15 @@
 :root {
   --bg:        #0F0A1E;   /* fondo, morado casi negro */
   --surface:   #1C1533;
-  --liquid-1:  #FFC978;   /* degradado del líquido */
-  --liquid-2:  #FF9A3C;
+  --liquid-1:  #FFFDF5;   /* degradado del líquido: leche */
+  --liquid-2:  #FFE8BC;
   --glass:     #FFFFFF;   /* borde del vaso, 90% opacidad */
   --ok:        #4ADE80;   /* pagado */
   --wait:      #FBBF24;   /* procesando */
   --muted:     #8B85A0;   /* pendiente */
+  /* FLUJO.md pide rojo para "faltan por asignar" pero no da uno.
+     Este aguanta el fondo oscuro y se lee desde la fila 5. */
+  --bad:       #FF6B6B;
 
   color-scheme: dark;
 }
@@ -25,6 +28,7 @@
   --color-ok: var(--ok);
   --color-wait: var(--wait);
   --color-muted: var(--muted);
+  --color-bad: var(--bad);
 }
 
 @layer base {

@@ -10,15 +10,20 @@
   transition: transform 800ms ease-out;
 }
 
-/* La onda se desplaza exactamente un periodo (100 unidades del viewBox),
-   por eso el bucle no tiene costura. */
+/* La onda se desplaza medio ancho de onda (--onda-despl, que lo calcula el
+   componente a partir del ancho real del path). Son periodos enteros, así
+   que el bucle no tiene costura, y como el path mide 4 viewBox el vaso
+   queda cubierto de borde a borde en todos los frames. */
 .vaca-onda {
   animation: vaca-onda 3.6s linear infinite;
 }
 
 @keyframes vaca-onda {
+  from {
+    transform: translateX(0);
+  }
   to {
-    transform: translateX(-100px);
+    transform: translateX(var(--onda-despl, -400px));
   }
 }
 
@@ -79,7 +84,9 @@
     filter: none;
   }
   40% {
-    filter: drop-shadow(0 0 20px rgba(255, 201, 120, 0.8));
+    /* Sale de la paleta, no de un color quemado: si cambia el líquido,
+       el resplandor del 100% cambia con él. */
+    filter: drop-shadow(0 0 20px color-mix(in srgb, var(--liquid-2) 80%, transparent));
   }
 }
 

@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useId, type CSSProperties } from 'react'
 import './Glass.css'
 
 interface GlassProps {
@@ -19,11 +19,29 @@ const RECORRIDO = ABAJO - ARRIBA + 6
 const VASO = 'M 20 20 L 56 230 Q 58 240 68 240 L 132 240 Q 142 240 144 230 L 180 20'
 const VASO_CERRADO = `${VASO} Z`
 
-// Onda de 8 medios periodos (400 de ancho) para un viewBox de 200: sobra
-// por los dos lados, así se puede desplazar un periodo entero sin que se
-// vea el salto. La superficie está en y=0; el relleno baja hasta 600.
-const ONDA =
-  'M -200 0 q 25 -8 50 0 t 50 0 t 50 0 t 50 0 t 50 0 t 50 0 t 50 0 t 50 0 L 200 600 L -200 600 Z'
+// La onda tiene que ser MUCHO más ancha que el viewBox, porque se desplaza
+// en bucle medio ancho de onda: si al final del ciclo su borde derecho cae
+// dentro del vaso, se ve el fondo. Con 800 de ancho (4 viewBox) empezando
+// en -100, lo visible (0..200) queda cubierto en CUALQUIER frame, con 100
+// de margen por los dos lados. La superficie está en y=0; el relleno baja
+// hasta 600.
+const ONDA_X = -100
+const ONDA_ANCHO = 800
+const ONDA_SEMI = 50 // medio periodo
+// Medio ancho de onda = 8 medios periodos exactos, por eso el bucle no
+// tiene costura. Se lo pasamos al CSS para que los dos números no se
+// puedan desincronizar (que es justo lo que rompía el dibujo).
+const ONDA_DESPL = ONDA_ANCHO / 2
+const ONDA = [
+  `M ${ONDA_X} 0`,
+  `q 25 -8 ${ONDA_SEMI} 0`,
+  ...Array(ONDA_ANCHO / ONDA_SEMI - 1).fill(`t ${ONDA_SEMI} 0`),
+  `L ${ONDA_X + ONDA_ANCHO} 600`,
+  `L ${ONDA_X} 600`,
+  'Z',
+].join(' ')
+
+const ONDA_ESTILO = { '--onda-despl': `${-ONDA_DESPL}px` } as CSSProperties
 
 const GOTAS = [
   { cx: 32, cy: 30, r: 5, delay: '820ms' },
@@ -57,7 +75,7 @@ export default function Glass({ percentage, className }: GlassProps) {
   // clipPath ignora los <g>, y el nivel y la onda son dos grupos anidados.
   const liquido = (relleno: string) => (
     <g className="vaca-nivel" style={nivel}>
-      <g className="vaca-onda">
+      <g className="vaca-onda" style={ONDA_ESTILO}>
         <path d={ONDA} fill={relleno} />
       </g>
     </g>
