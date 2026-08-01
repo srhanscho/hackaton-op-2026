@@ -13,6 +13,16 @@ Content-Type: application/json
   ]
 }
 
-GET http://localhost:3000//api/bills/{{createBill.response.body.$.billId}}
+### Obtener cuenta
+GET http://localhost:3000/api/bills/{{createBill.response.body.$.billId}}
 
+### Iniciar pago
+# @name iniciarPago
+POST http://localhost:3000/api/bills/{{createBill.response.body.$.billId}}/pay
+Content-Type: application/json
+
+{
+  "participanteId": "{{createBill.response.body.$.participantes[2].id}}",
+  "walletAddress": "https://ilp.interledger-test.dev/camilo"
+}
 
