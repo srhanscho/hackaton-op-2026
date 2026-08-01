@@ -1,0 +1,22 @@
+# Dependencias
+node_modules/
+
+# Archivos de compilación
+dist/
+build/
+
+# Variables de entorno
+.env
+.env.*
+
+# Logs
+*.log
+pnpm-debug.log*
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Editor (opcional)
+.vscode/
+.idea/
