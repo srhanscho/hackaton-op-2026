@@ -1,4 +1,5 @@
 import { createQuote } from './openPayments/quote.js'
+import { unscaleValue } from './openPayments/client.js'
 import { continueOutgoingGrant, createOutgoingPayment, requestOutgoingGrant } from './openPayments/outgoing.js'
 import { billRepository } from '../repositories/memoryBillRepository.js'
 
@@ -67,7 +68,12 @@ export async function finalizarPago ({ billId, participanteId, interactRef }: { 
     accessToken: grant.access_token.value
   })
 
+  // Lo que salió de SU wallet, que puede ser otra moneda: es el badge de
+  // cross-currency del vaso y la línea de conversión del recibo.
+  const { debitAmount } = grantSession.quote
   participante.estado = 'pagado'
+  participante.monedaPago = debitAmount.assetCode
+  participante.montoPagado = unscaleValue(debitAmount.value, debitAmount.assetScale)
   delete participante.grantSession
   billRepository.save(bill)
 

@@ -3,8 +3,7 @@ POST http://localhost:3000/api/bills
 Content-Type: application/json
 
 {
-  "restauranteWallet": "https://ilp.interledger-test.dev/camilo",
-  "moneda": "COP",
+  "restaurantWallet": "https://ilp.interledger-test.dev/camilo",
   "total": 120000,
   "participantes": [
     { "nombre": "Ana", "monto": 40000 },
@@ -26,3 +25,5 @@ Content-Type: application/json
   "walletAddress": "https://ilp.interledger-test.dev/camilo"
 }
 
+### Cerrar la cuenta y emitir el recibo (400 si todavía va en menos del 100%)
+POST http://localhost:3000/api/bills/{{createBill.response.body.$.billId}}/complete

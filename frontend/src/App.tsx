@@ -5,6 +5,7 @@ import Receipt from './pages/Receipt'
 import PayScreen from './pages/PayScreen'
 import ThanksScreen from './pages/ThanksScreen'
 import TestGlass from './pages/TestGlass'
+import TestQr from './pages/TestQr'
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/pagar/:id/gracias" element={<ThanksScreen />} />
         {/* Banco de pruebas del vaso, fuera del flujo del demo. */}
         <Route path="/test" element={<TestGlass />} />
+        <Route path="/test-qr" element={<TestQr />} />
       </Routes>
     </BrowserRouter>
   )

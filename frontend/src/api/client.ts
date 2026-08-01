@@ -4,7 +4,7 @@ import * as mock from './mock'
 const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
 // Se apaga cuando Camilo tenga los endpoints. Es el único switch.
-const USE_MOCK: boolean = true
+const USE_MOCK: boolean = false
 
 /** Body de POST /api/bills. */
 export interface CrearBillInput {
@@ -44,7 +44,7 @@ export async function payShare(
   participanteId: string,
   walletAddress: string,
 ): Promise<string> {
-  if (USE_MOCK) return mock.payShare(id)
+  if (USE_MOCK) return mock.payShare(id, participanteId, walletAddress)
   const { redirectUrl } = await req<{ redirectUrl: string }>(
     `/api/bills/${id}/pay`,
     {

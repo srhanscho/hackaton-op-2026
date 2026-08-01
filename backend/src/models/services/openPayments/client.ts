@@ -18,3 +18,8 @@ export async function getWallet (url: string = WALLET_ADDRESS): Promise<WalletAd
 export function scaleValue (value: number, assetScale: number): string {
   return String(Math.round(value * 10 ** assetScale))
 }
+
+/** Al revés que `scaleValue`: de la escala del asset a unidades enteras. */
+export function unscaleValue (value: string, assetScale: number): number {
+  return Number(value) / 10 ** assetScale
+}

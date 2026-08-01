@@ -108,7 +108,16 @@ export default function CreateBill() {
   return (
     <main className="mx-auto flex max-w-lg flex-col gap-6 p-5">
       <header className="flex items-start justify-between gap-4">
-        <h1 className="text-3xl font-bold">Nueva vaca</h1>
+        <div className="flex flex-col gap-3">
+          <img
+            src="/logo.png"
+            alt="La Vaca"
+            width={64}
+            height={64}
+            className="h-16 w-16"
+          />
+          <h1 className="text-3xl font-bold">Nueva vaca</h1>
+        </div>
         <button
           type="button"
           onClick={datosDemo}
