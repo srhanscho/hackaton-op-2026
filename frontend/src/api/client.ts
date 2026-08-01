@@ -55,6 +55,20 @@ export async function payShare(
   return redirectUrl
 }
 
+/**
+ * Salida de emergencia: suelta a un participante trabado en 'procesando'.
+ * El polling se encarga de refrescar la fila.
+ */
+export async function cancelPago(billId: string, participanteId: string): Promise<void> {
+  // El mock nunca deja a nadie en 'procesando', así que no hay nada que
+  // soltar: el botón ni siquiera aparece.
+  if (USE_MOCK) return
+  await req<{ ok: boolean }>(
+    `/api/bills/${billId}/participantes/${participanteId}/cancel`,
+    { method: 'POST' },
+  )
+}
+
 /** POST /api/bills/:id/complete → devuelve el recibo. Tira 400 si falta plata. */
 export async function completeBill(id: string): Promise<Recibo> {
   if (USE_MOCK) return mock.completeBill(id)

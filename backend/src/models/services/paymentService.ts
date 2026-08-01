@@ -1,5 +1,6 @@
 import { createQuote } from './openPayments/quote.js'
 import { unscaleValue } from './openPayments/client.js'
+import { BillError } from './billService.js'
 import { continueOutgoingGrant, createOutgoingPayment, requestOutgoingGrant } from './openPayments/outgoing.js'
 import { billRepository } from '../repositories/memoryBillRepository.js'
 
@@ -78,4 +79,33 @@ export async function finalizarPago ({ billId, participanteId, interactRef }: { 
   billRepository.save(bill)
 
   return { billId }
+}
+
+/**
+ * Salida de emergencia del demo: suelta a un participante que se quedó
+ * trabado en 'procesando' (cerró la pestaña del Accept, se le fue el wifi)
+ * para que otro pueda pagar esa parte.
+ *
+ * Solo toca estado local: no habla con Open Payments ni revoca el grant. Si
+ * el amigo termina el Accept después, el callback no encuentra grantSession
+ * y se va a `?error=1` sin mover un peso.
+ */
+export function cancelarPago ({ billId, participanteId }: { billId: string, participanteId: string }) {
+  const bill = billRepository.getById(billId)
+  if (!bill) throw new BillError('Cuenta no encontrada', 404)
+
+  const participante = bill.participantes.find((p) => p.id === participanteId)
+  if (!participante) throw new BillError('Participante no encontrado', 404)
+
+  if (participante.estado === 'pagado') {
+    throw new BillError('Este participante ya pagó, no se puede cancelar', 400)
+  }
+
+  participante.estado = 'pendiente'
+  participante.monedaPago = null
+  participante.montoPagado = null
+  delete participante.grantSession
+  billRepository.save(bill)
+
+  return { ok: true }
 }

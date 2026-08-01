@@ -91,7 +91,11 @@ export default function VacaScreen() {
         de <Money value={bill.total} code={bill.assetCode} />
       </p>
 
-      <ParticipantList participantes={bill.participantes} assetCode={bill.assetCode} />
+      <ParticipantList
+        participantes={bill.participantes}
+        assetCode={bill.assetCode}
+        billId={bill.id}
+      />
 
       {falloEnvio && (
         <p className="rounded-xl border border-bad/40 bg-bad/10 px-3 py-2 text-center font-semibold text-bad">

@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { BillError, cerrarCuenta, crearCuenta, obtenerEstado } from '../models/services/billService.js'
+import { cancelarPago } from '../models/services/paymentService.js'
 
 export const billController = Router()
 
@@ -24,6 +25,21 @@ billController.post('/bills', async (req, res) => {
 billController.get('/bills/:id', async (req, res) => {
   try {
     const result = await obtenerEstado(req.params.id)
+    res.json(result)
+  } catch (error) {
+    console.error(error)
+    res.status(statusDe(error)).json({ error: (error as Error).message })
+  }
+})
+
+// Salida de emergencia: devuelve a 'pendiente' a alguien trabado en
+// 'procesando' para que otro pueda pagar esa parte. No toca Open Payments.
+billController.post('/bills/:id/participantes/:participanteId/cancel', (req, res) => {
+  try {
+    const result = cancelarPago({
+      billId: req.params.id,
+      participanteId: req.params.participanteId
+    })
     res.json(result)
   } catch (error) {
     console.error(error)
