@@ -95,14 +95,19 @@ export default function ParticipantRow({
         )}
       </div>
 
-      {/* Lo que impresiona al jurado: pagó en euros y al restaurante le
-          llegaron pesos. */}
+      {/* Pagó en otra moneda: esto es lo que se debitó de SU wallet.
+          NO se pinta conversión. Lo acreditado en la cuenta sería el
+          receiveAmount del quote y el backend no lo manda; `p.monto` es la
+          parte asignada, que es otra cosa y pintarla aquí mentía. */}
       {convirtio && (
         <p className="flex items-center gap-1.5 self-end text-sm text-muted">
           <span aria-hidden="true">🌍</span>
-          <Money value={p.montoPagado!} code={p.monedaPago!} />
-          <span aria-hidden="true">→</span>
-          <Money value={p.monto} code={assetCode} className="text-ok" />
+          pagó
+          <Money
+            value={p.montoPagado!}
+            code={p.monedaPago!}
+            className="font-semibold text-white"
+          />
         </p>
       )}
     </li>

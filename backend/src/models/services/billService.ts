@@ -105,10 +105,17 @@ export async function cerrarCuenta (billId: string) {
     throw new BillError(`La cuenta va en ${estado.porcentaje}%, todavía falta plata`, 400)
   }
 
-  await completeIncomingPayment({
-    id: bill.incomingPaymentUrl,
-    accessToken: bill.accessToken
-  })
+  try {
+    await completeIncomingPayment({
+      id: bill.incomingPaymentUrl,
+      accessToken: bill.accessToken
+    })
+  } catch (error) {
+    // 409 "wrong state" = Rafiki ya cerró el incoming payment solo al llegar
+    // al incomingAmount. La cuenta está cerrada: no es un error para nosotros.
+    const status = (error as { status?: number }).status
+    if (status !== 409) throw error
+  }
 
   // Si alguien vuelve a pulsar Enviar, el recibo mantiene la fecha del cierre
   // de verdad en vez de moverse.
