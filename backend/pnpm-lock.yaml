@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       express:
-        specifier: ^5.2.1
+        specifier: 5.2.1
         version: 5.2.1
     devDependencies:
       standard:
-        specifier: ^17.1.2
+        specifier: 17.1.2
         version: 17.1.2
 
 packages:
