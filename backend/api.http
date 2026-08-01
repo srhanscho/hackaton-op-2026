@@ -1,0 +1,18 @@
+# @name createBill
+POST http://localhost:3000/api/bills
+Content-Type: application/json
+
+{
+  "restauranteWallet": "https://ilp.interledger-test.dev/camilo",
+  "moneda": "COP",
+  "total": 120000,
+  "participantes": [
+    { "nombre": "Ana", "monto": 40000 },
+    { "nombre": "Luis", "monto": 40000 },
+    { "nombre": "Sofi", "monto": 40000 }
+  ]
+}
+
+GET http://localhost:3000//api/bills/{{createBill.response.body.$.billId}}
+
+
